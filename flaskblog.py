@@ -37,9 +37,15 @@ def register():
         return redirect(url_for('hello'))
     return render_template('register.html', title='Register', form=form)
 
-@app.route("/login")
+@app.route("/login", methods=['GET','POST'])
 def login():
     form= LoginForm()
+    if form.validate_on_submit():
+        if form.email.data == 'admin@blog.com' and form.password.data =='password':
+            flash(f'Login successful for {form.email.data}', 'success')
+            return redirect(url_for('hello'))
+        else:
+            flash('Your login credentials do not match an account in our system', 'danger')
     return render_template('login.html', title='Login', form=form)
 
 if __name__=='__main__':
